@@ -1,3 +1,40 @@
+import {guiaErrores} from "./funciones.js"
+
+
+export async function consultaApi(metodo,finUrl,datos=null){
+    
+    try {
+        //Se realiza la consulta al servidor
+        const response = await fetch(`https://fakestoreapi.com/products/${finUrl}`,
+                                     { method: `${metodo}`,
+                                       headers: { 'Content-Type': 'application/json' },
+                                       ...(datos&&{body: JSON.stringify(datos)}) }
+                                    )
+        
+        //Captura si el servidor responde un 4XX o 5XX o algun otro que idique que no pude responder la consulta.
+        if (!response.ok) { const msjError = metodo === 'GET' ? "traer productos" :
+                                             metodo === 'POST' ? "ingresar nuevo producto" :
+                                             "eliminar producto";
+            
+            throw new Error(`Error al intentar ${msjError}, status: ${response.status}`);
+        }
+        
+        //Se evita resultado = Promise { <pending> }
+        const resultado = await response.json();
+        console.log(resultado);
+    } catch (error) {
+        console.log(">> Error: "+error.message);
+        guiaErrores(error.message);        
+    } finally{
+        const msjFinally = metodo === 'GET' ? "Fin de la consulta." :
+                            metodo === 'POST' ? "Fin del ingreso." :
+                            "Fin de la eliminación.";
+
+        console.log(msjFinally)
+    }
+}
+
+
 async function traerProductos(data){        
     try {
         const urlFetch = 'https://fakestoreapi.com/'+data;
@@ -49,6 +86,7 @@ async function eliminarProducto (id) {
     
 }
 
+
 export async function seEjecuta(accion, data){
     switch (accion){
         case 1:
@@ -63,16 +101,4 @@ export async function seEjecuta(accion, data){
     }
     console.log("Bieen!!");
     return;
-}
-
-function guiaErrores(mensaje){
-    //Aquí una brebe orientación al usuario sobre el error...
-    switch (mensaje){
-            case "fetch failed":
-                console.log("\t - Url inválida o inexistente.")
-                break
-            case "Unexpected end of JSON input":
-                console.log("\t - No existe producto con ese ID")
-                break                
-        }
 }

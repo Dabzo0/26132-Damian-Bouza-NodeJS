@@ -56,15 +56,15 @@ export function validarComando(com){
     const comando = com.toUpperCase()
     console.log("Comando: "+comando)
     switch (comando){
-        case "GET":
+        case 'GET':
             console.log("Se procede al GET")
-            return 1;
-        case "POST":
+            return 'GET';
+        case 'POST':
             console.log("Se procede al POST")
-            return 2;
-        case "DELETE":
+            return 'POST';
+        case 'DELETE':
             console.log("Se procede al DELETE")
-            return 3;
+            return 'DELETE';
         default:
             listaErrores("comando", comando);
             return help("comando");
@@ -161,4 +161,16 @@ export function validarParametros(accion, datos){
     }
     
     return false;
+}
+
+export function guiaErrores(mensaje){
+    //Aquí una brebe orientación al usuario sobre el error...
+    switch (mensaje){
+            case "fetch failed":
+                console.log("\t - Url inválida o inexistente.")
+                break
+            case "Unexpected end of JSON input":
+                console.log("\t - No existe producto con ese ID")
+                break                
+        }
 }
