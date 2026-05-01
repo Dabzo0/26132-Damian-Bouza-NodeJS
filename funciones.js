@@ -178,6 +178,31 @@ function listaErrores(error="",dato=""){
     }
 }
 
+export function imprimirResultado(metodo, resultado){
+    const Re = "\x1b[0m";//Reset
+    const V = "\x1b[32m";//Color verde.
+    const C = "\x1b[36m";//Color cián.
+    const Ro = "\x1b[31m";//Color rojo.
+    const Az = "\x1b[34m";//Color azul.
+    const Am = "\x1b[33m";//Color amarillo.
+    const Ma = "\x1b[35m";//Color Magenta.
+    const N = "\x1b[1m";//Negrita.
+
+    resultado.forEach((p, i) => {
+            console.log(`\n📦 ${N}PRODUCTO${resultado.length>1?" # "+(i + 1):":"}${Re}`)
+            console.log(`\t${N}${Am}id: ${p.id}${Re} -- ${N}${Az}${p.nombre}${Re}`)
+            console.log(`\t${N}Categoría: ${Re}${Ma}${p.cat}${Re}${" ".repeat(20)}Precio: ${V}$${p.precio}${Re}`)
+            console.log(`\t${N}Imágen: ${Re}${C}${p.img}${Re}`)
+            console.log(`\t${N}Descripción: ${Re}${(p.desc).length>157?p.desc.slice(0,156)+" ...":p.desc}`)
+            }
+        );
+    
+    if (metodo==='GET'){console.log(`\n-- Total de productos: ${resultado.length}\n`)};
+    if (metodo==='POST'){console.log(`\n\t✅ Ingresado!\n`)};
+    if (metodo==='DELETE'){console.log(`\n\t🗑️  Ya NO existe.\n`)};
+
+}
+
 export function guiaErrores(mensaje){
     //Aquí una brebe orientación al usuario sobre el error...
     switch (mensaje){

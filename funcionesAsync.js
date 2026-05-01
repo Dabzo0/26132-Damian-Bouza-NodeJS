@@ -1,4 +1,4 @@
-import {guiaErrores} from "./funciones.js"
+import {guiaErrores, imprimirResultado} from "./funciones.js"
 
 
 export async function consultaApi(metodo,finUrl,datos=null){
@@ -17,16 +17,17 @@ export async function consultaApi(metodo,finUrl,datos=null){
         //Se evita resultado = Promise { <pending> }.
         const resultado = ([].concat(await response.json())).map(p => ({
                                                             "id" : p.id,
-                                                            "nom" : p.title,
+                                                            "nombre" : p.title,
                                                             "precio" : p.price,
                                                             "cat" : p.category,
                                                             "desc" : p.description || "Sin descripción",
                                                             "img": p.image || "Sin imágen",
                                                             })
-                                                        ); // Cuidado, este map se puede hacer de esta manera porque Facstoreapi devuele un directamente [{...}] <- un objeto que solo contiene el array.
+                                                        ); // Cuidado, este map se puede hacer de esta manera porque Fakestoreapi devuele un directamente [{...}] <- un objeto que solo contiene el array.
                                                            // Si la API devolviara los datos dentro una clave del objeto se debe usar "([].concat(await response.json().<clave>))" en donde <clave> es la clave que contiene el array a mapear ["clave": {...}]
                                                            // EL [].concat() es para forzar el mapeo de un objeto, en caso de que la api devuelva solo un array {...}
-        console.log(resultado);
+        //console.log(resultado);
+        imprimirResultado(metodo,resultado);
         console.log(`>> Se realizó exitosamente la petición " ${metodo} "`); 
     } catch (error) {
         console.log(`>> Error: ${error.message}.`);
