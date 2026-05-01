@@ -1,14 +1,11 @@
-import * as func from "./funciones.js"
-import * as asyncFunc from "./funcionesAsync.js"
+import { validarComando, validarParametros,  } from "./funciones.js"
+import { consultaApi } from "./funcionesAsync.js" 
 
-const accion = func.validarComando(process.argv.length > 2 ? process.argv[2] : "");
-await asyncFunc.consultaApi("GET","","")
-/*
+const accion = validarComando(process.argv.length > 2 ? process.argv[2] : "");
+
 if(accion){
-    const parametrosValidos = func.validarParametros(accion, process.argv.slice(3));
-    if (parametrosValidos){
-        await asyncFunc.seEjecuta(accion,parametrosValidos);
-    }
-}*/
+    const parametrosValidos = validarParametros(accion, process.argv.slice(3));
+    if (!(parametrosValidos === false)) await consultaApi(accion,parametrosValidos.id,parametrosValidos.body);
+}
 
 console.log("Done...")

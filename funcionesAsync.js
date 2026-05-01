@@ -2,39 +2,30 @@ import {guiaErrores} from "./funciones.js"
 
 
 export async function consultaApi(metodo,finUrl,datos=null){
-    
+    console.log(`Se inicia el ${metodo}`)
     try {
-        //Se realiza la consulta al servidor
+        //Se realiza la petición al servidor.
         const response = await fetch(`https://fakestoreapi.com/products/${finUrl}`,
                                      { method: `${metodo}`,
                                        headers: { 'Content-Type': 'application/json' },
-                                       ...(datos&&{body: JSON.stringify(datos)}) }
+                                       ...(datos&&{body: JSON.stringify(datos)}) } // <--- Se agrega la clave "body" sólo si el tercer parámetro que recibe la función no es null.
                                     )
         
-        //Captura si el servidor responde un 4XX o 5XX o algun otro que idique que no pude responder la consulta.
-        if (!response.ok) { const msjError = metodo === 'GET' ? "traer productos" :
-                                             metodo === 'POST' ? "ingresar nuevo producto" :
-                                             "eliminar producto";
-            
-            throw new Error(`Error al intentar ${msjError}, status: ${response.status}`);
-        }
+        //Se captura si el servidor responde un 4XX o 5XX, o algun otro, que idique que no puede dar respuesta a la petición.
+        if (!response.ok) throw new Error(`Error al intentar realizar el ${metodo}, status: ${response.status}`);
         
-        //Se evita resultado = Promise { <pending> }
+        //Se evita resultado = Promise { <pending> }.
         const resultado = await response.json();
         console.log(resultado);
     } catch (error) {
         console.log(">> Error: "+error.message);
         guiaErrores(error.message);        
     } finally{
-        const msjFinally = metodo === 'GET' ? "Fin de la consulta." :
-                            metodo === 'POST' ? "Fin del ingreso." :
-                            "Fin de la eliminación.";
-
-        console.log(msjFinally)
+        console.log(`Fin del ${metodo}.`)
     }
 }
 
-
+/* Luego del Rework todo que sigue es innecesario... Lo conservo por las dudas! XD
 async function traerProductos(data){        
     try {
         const urlFetch = 'https://fakestoreapi.com/'+data;
@@ -86,7 +77,6 @@ async function eliminarProducto (id) {
     
 }
 
-
 export async function seEjecuta(accion, data){
     switch (accion){
         case 1:
@@ -102,3 +92,4 @@ export async function seEjecuta(accion, data){
     console.log("Bieen!!");
     return;
 }
+*/

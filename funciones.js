@@ -1,5 +1,132 @@
+export function validarComando(com){
+    const comando = com.toUpperCase()
+    console.log("Comando: "+comando)
+    switch (comando){
+        case 'G':
+        case 'GET':
+            return 'GET';
+        case 'P':
+        case 'POST':
+            return 'POST';
+        case 'D':
+        case 'DELETE':
+            return 'DELETE';
+        default:
+            listaErrores("comando", comando);
+            help("comando");
+            return false;
+    }
+}
+
+export function validarParametros(accion, datos){
+    const soloNumeros = /^\d+$/;
+    const esSoloLetras = /^[a-zA-Z]+$/;
+    const contieneLetra = /[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]/;
+    
+    console.log(`Parámetros: [ ${datos.length} ] => ${datos}`)
+    
+    switch (accion) {        
+        case 'GET':
+            if (datos.length < 1) {
+                listaErrores("parametrosInsuficientes");
+                help("traer");
+                return false;
+            }
+            const dataGet = datos[0].toLowerCase().replace(" ", ".");
+            
+            if (dataGet.slice(0,9) != "products/") {
+                listaErrores("",dataGet);
+                help("traer");
+                return false;
+            }
+            
+            const idGet = dataGet.slice(9);
+
+            console.log(dataGet.slice(0,9)+" --- "+idGet);
+            
+            if (idGet!=""){
+                if (!soloNumeros.test(idGet) || idGet == 0 ){
+                    listaErrores("id",idGet);
+                    help("traer");
+                    return false;
+                }
+            }
+            return {"id":idGet != "" ? parseInt(idGet).toString() : idGet,"body":null};
+            break;
+        
+        case 'POST':            
+            if (datos.length < 4) {
+                listaErrores("parametrosInsuficientes");
+                help("ingresar")
+                return false;
+            }
+            let todoOk = true;
+            const title = datos[1];
+            const price = Number(datos[2].replace(" ", "."));
+            const category = datos[3].toLowerCase();
+            
+            if (datos[0] != "products"){
+                listaErrores("",datos[0]);
+                todoOk = false;
+            }
+            if (!contieneLetra.test(title)){
+                listaErrores("title", datos[1]);
+                todoOk = false;
+            }
+            if (isNaN(price) || price < 0){
+                listaErrores("price",datos[2]);
+                todoOk = false;
+            }
+            if (!esSoloLetras.test(category)){
+                listaErrores("category",datos[3]);
+                todoOk = false;
+            }
+            
+            if (!todoOk) {
+                help("ingresar");
+                return false;
+            }
+
+            return { "id":"","body": {"title": title,"price": price,"category": category}};
+            break;
+
+        case 'DELETE':
+            if (datos.length < 1) {
+                listaErrores("parametrosInsufisientes");
+                return help("eliminar");
+            }
+            
+            const dataDelete = datos[0].toLowerCase().replace(" ", ".");
+            if (dataDelete.slice(0,9) != "products/") {
+                listaErrores("",dataDelete);
+                help("eliminar");
+                return false;
+            }
+
+            const idDelete = dataDelete.slice(9);
+
+            if (!idDelete){
+                listaErrores("id",idDelete);
+                    help("traer");
+                    return false;
+            }else{
+                if (!soloNumeros.test(idDelete) || idDelete == 0 ){
+                    listaErrores("id",idDelete);
+                    help("traer");
+                    return false;
+                }
+            }
+
+            return {"id": idDelete.toString() ,"body":null};
+            break;
+            
+        default :
+            return false;
+    }
+}
+
 function help(tipo){
-    console.log(">> Ingrese:");  
+    console.log(">> Ingresar:");  
     switch (tipo){
         case "comando": 
             console.log("\t-> GET     para CONSULTAR productos.");
@@ -9,7 +136,7 @@ function help(tipo){
         case "traer":
             console.log("\t-> GET products              para consultar por TODOS los productos.");
             console.log("\t-> GET products/<productid>  para consultar por un producto con el ID específico.");
-            console.log("\t\t - <productid> Id del producti (sólo número).");
+            console.log("\t\t - <productid> Id del producto (sólo número).");
             break;
         case "ingresar":
             console.log("\t-> POST products <title> <price> <category>.");
@@ -24,7 +151,6 @@ function help(tipo){
         default:
             console.log("No te puedo ayudar! XD ...");        
     }
-    return null;
 }
 
 function listaErrores(error="",dato=""){
@@ -50,117 +176,6 @@ function listaErrores(error="",dato=""){
         default :
          console.log("- [ "+dato+" ] No válido");
     }
-}
-
-export function validarComando(com){
-    const comando = com.toUpperCase()
-    console.log("Comando: "+comando)
-    switch (comando){
-        case 'GET':
-            console.log("Se procede al GET")
-            return 'GET';
-        case 'POST':
-            console.log("Se procede al POST")
-            return 'POST';
-        case 'DELETE':
-            console.log("Se procede al DELETE")
-            return 'DELETE';
-        default:
-            listaErrores("comando", comando);
-            return help("comando");
-    }
-}
-
-export function validarParametros(accion, datos){
-    
-    console.log("Parámetros : "+datos.length+" - "+datos)
-    
-    switch (accion) {
-        
-        case 1:            
-            if (datos.length < 1) {
-                listaErrores("parametrosInsuficientes");
-                return help("traer");
-            }
-            const dataGet = datos[0].toLowerCase().replace(" ", ".");
-            const idGet = Number(dataGet.slice(9));
-            //console.log(data.slice(0,9)+" "+data.slice(9));
-            if (dataGet.length > ("products/").length){
-                if (dataGet.slice(0,9) != "products/") {
-                    listaErrores("",dataGet);
-                    return help("traer");
-                }
-                if (!Number.isInteger(idGet) || idGet<1){
-                    listaErrores("id",dataGet.slice(9));
-                    return help("traer");
-                }
-            }else{
-                if (dataGet!="products") {
-                    listaErrores("",dataGet);
-                    return help("traer");}
-            }
-
-            return dataGet;
-        
-        case 2:            
-            if (datos.length < 4) {
-                listaErrores("parametrosInsuficientes");
-                return help("ingresar");
-            }
-            let products = datos[0];
-            const title = datos[1];
-            const price = datos[2].replace(" ", ".");
-            const category = datos[3].toLowerCase();
-            const esSoloLetras = /^[a-zA-Z]+$/;
-            const contieneLetra = /[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]/;
-            if (products != "products"){
-                listaErrores("",products);
-                products=false;
-            }
-            if (!contieneLetra.test(title)){
-                listaErrores("title", title);
-                products=false;
-            }
-            if (isNaN(price)){
-                listaErrores("price",price);
-                products = false;
-            }
-            if (!esSoloLetras.test(category)){
-                listaErrores("category",category);
-                products=false;}
-            if (!products){return help("ingresar");}
-            
-            return {"title":datos[1],"price": parseInt(datos[2]),"category":datos[3]};
-            break;
-
-        case 3:
-            if (datos.length < 1) {
-                listaErrores("parametrosInsufisientes");
-                return help("eliminar");
-            }
-            const dataDelete = datos[0].toLowerCase();
-            const idDelete = Number(dataDelete.slice(9));
-            if (dataDelete.length < ("products/").length + 1){
-                listaErrores("",dataDelete);
-                return help("eliminar");
-
-            }else{
-                if(dataDelete.slice(0,9)!="products/"){
-                    listaErrores("",dataDelete);
-                    return help("eliminar");
-                }
-                if (!Number.isInteger(idDelete) || idDelete < 1){
-                    listaErrores("id",dataDelete.slice(9));
-                    return help("eliminar");
-                }
-            }
-
-            return idDelete.toString();
-            break;
-        
-    }
-    
-    return false;
 }
 
 export function guiaErrores(mensaje){
