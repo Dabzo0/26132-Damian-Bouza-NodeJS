@@ -22,7 +22,7 @@ export const validarComando = (com) => {
 
 export const validarParametros = (accion, datos) => {
     const soloNumeros = /^\d+$/;
-    const esSoloLetras = /^[a-zA-Z]+$/;
+    const soloLetras = /^[a-zA-Z]+$/;
     const contieneLetra = /[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]/;
     
     console.log(`Parámetros: [ ${datos.length} ] => ${datos}`)
@@ -79,7 +79,7 @@ export const validarParametros = (accion, datos) => {
                 impFn.imprimirErrorParametros("price",datos[2]);
                 todoOk = false;
             }
-            if (!esSoloLetras.test(category)){
+            if (!soloLetras.test(category)){
                 impFn.imprimirErrorParametros("category",datos[3]);
                 todoOk = false;
             }

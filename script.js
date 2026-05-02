@@ -5,10 +5,8 @@ const url= `https://fakestoreapi.com/`
 
 const accion = validarComando(process.argv.length > 2 ? process.argv[2] : "");
 
-if(accion){
-    const parametrosValidos = validarParametros(accion, process.argv.slice(3));
+const parametrosValidos = accion ? validarParametros(accion, process.argv.slice(3)) : false;
 
-    if (!(parametrosValidos === false)) await consultaApi(accion,`${url}${parametrosValidos.urlFin}`,parametrosValidos.body);
-}
+if (!(parametrosValidos === false)) await consultaApi(accion,`${url}${parametrosValidos.urlFin}`,parametrosValidos.body);
 
 console.log("Done...")
