@@ -1,18 +1,18 @@
-import {guiaErrores, imprimirResultado} from "./funciones.js"
+import { imprimirResultado, imprimirAyudaError } from "./funcionesImprimir.js"
 
-
-export async function consultaApi(metodo,finUrl,datos=null){
+export const consultaApi = async (metodo,url,body=null) => {
     console.log(`Se inicia el ${metodo}`)
     try {
         //Se realiza la petición al servidor.
-        const response = await fetch(`https://fakestoreapi.com/products/${finUrl}`,
+        const response = await fetch(`${url}`,
                                      { method: `${metodo}`,
                                        headers: { 'Content-Type': 'application/json' },
-                                       ...(datos&&{body: JSON.stringify(datos)}) } // <--- Se agrega la clave "body" sólo si el tercer parámetro que recibe la función no es null.
+                                       ...(body&&{body: JSON.stringify(body)}) } // <--- Se agrega la clave "body" sólo si so la recibe al llamar esta fucnión.
                                     )
         
         //Se captura si el servidor responde un 4XX o 5XX, o algun otro, que idique que no puede dar respuesta a la petición.
         if (!response.ok) throw new Error(`Error al intentar realizar el ${metodo}, status: ${response.status}`);
+        //console.log(response)
         
         //Se evita resultado = Promise { <pending> }.
         const resultado = ([].concat(await response.json())).map(p => ({
@@ -31,7 +31,7 @@ export async function consultaApi(metodo,finUrl,datos=null){
         console.log(`>> Se realizó exitosamente la petición " ${metodo} "`); 
     } catch (error) {
         console.log(`>> Error: ${error.message}.`);
-        guiaErrores(error.message);
+        imprimirAyudaError(error.message);
         console.log(`>> No se pudo realizar la petición " ${metodo} "`);        
     } finally{
         console.log(`Fin del ${metodo}.`)
