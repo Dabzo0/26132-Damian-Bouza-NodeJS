@@ -7,7 +7,7 @@ export const consultaApi = async (metodo,url,body=null) => {
         const response = await fetch(`${url}`,
                                      { method: `${metodo}`,
                                        headers: { 'Content-Type': 'application/json' },
-                                       ...(body&&{body: JSON.stringify(body)}) } // <--- Se agrega la clave "body" sólo si so la recibe al llamar esta fucnión.
+                                       ...(body&&{body: JSON.stringify(body)}) } // <--- Se agrega la clave "body" sólo si se la recibe al llamar esta fucnión.
                                     )
         
         //Se captura si el servidor responde un 4XX o 5XX, o algun otro, que idique que no puede dar respuesta a la petición.

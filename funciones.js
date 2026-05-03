@@ -44,7 +44,7 @@ export const validarParametros = (accion, datos) => {
             
             const idGet = dataGet.slice(9);
 
-            console.log(dataGet.slice(0,9)+" --- "+idGet);
+            //console.log(dataGet.slice(0,9)+" --- "+idGet);
             
             if (idGet!=""){
                 if (!soloNumeros.test(idGet) || idGet == 0 ){
