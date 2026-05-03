@@ -1,14 +1,22 @@
 {
   "name": "be_nodejs_2026",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Proyecto para el curso de Back End NodeJS de Talento Tech/",
+  "main": "script.js",
   "type": "module",
+  "keywords": [],
+  "author": "Damian Bouza",
+  "license": "ISC",
+  "homepage": "https://github.com/Dabzo0/26132-Damian-Bouza-NodeJS#readme",
+  "bugs": {
+    "url": "https://github.com/Dabzo0/26132-Damian-Bouza-NodeJS/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dabzo0/26132-Damian-Bouza-NodeJS.git"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node script.js"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  }
 }
