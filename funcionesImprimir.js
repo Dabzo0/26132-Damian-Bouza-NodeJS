@@ -6,18 +6,18 @@ export const imprimirHelp = (tipo) => {
             console.log("\t-> POST    para INGRESAR un producto.");
             console.log("\t-> DELETE  para ELIMIAR un producto con el id específico.");
             break;
-        case "traer":
+        case 'GET':
             console.log("\t-> GET products              para consultar por TODOS los productos.");
             console.log("\t-> GET products/<productid>  para consultar por un producto con el ID específico.");
             console.log("\t\t - <productid> Id del producto (sólo número).");
             break;
-        case "ingresar":
+        case 'POST':
             console.log("\t-> POST products <title> <price> <category>.");
             console.log("\t\t - <title> Nombre del producto (sin espacios).");
             console.log("\t\t - <price> Precio del producto (número).");
             console.log("\t\t - <categary> Categoría del producto (sin espacios).");
             break;
-        case "eliminar":
+        case "DELETE":
             console.log("\t-> DELETE products/<productid>.");
             console.log("\t\t - <productid> Id del producto (sólo número).");
             break;    

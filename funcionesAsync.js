@@ -1,13 +1,16 @@
 import { imprimirResultado, imprimirAyudaError } from "./funcionesImprimir.js"
 
 export const consultaApi = async (metodo,ruta,body=null) => {
-    console.log(`Se inicia el ${metodo}`)
+    console.log(`Se inicia el ${metodo}`);
+    console.log(`\turl: ${ruta}`);
+    if (body) console.log(`\tbody: ${JSON.stringify(body)}`);
+
     try {
         //Se realiza la petición al servidor.
         const response = await fetch(`${ruta}`,
                                      { method: `${metodo}`,
                                        headers: { 'Content-Type': 'application/json' },
-                                       ...(body&&{body: JSON.stringify(body)}) } // <--- Se agrega la clave "body" sólo si se la recibe al llamar esta fucnión.
+                                       ...(body && {body: JSON.stringify(body)}) } // <--- Se agrega la clave "body" sólo si se la recibe al llamar esta fucnión.
                                     )
         
         //Se captura si el servidor responde un 4XX o 5XX, o algun otro, que idique que no puede dar respuesta a la petición.
