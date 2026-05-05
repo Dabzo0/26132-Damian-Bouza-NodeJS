@@ -1,10 +1,10 @@
 import { imprimirResultado, imprimirAyudaError } from "./funcionesImprimir.js"
 
-export const consultaApi = async (metodo,url,body=null) => {
+export const consultaApi = async (metodo,ruta,body=null) => {
     console.log(`Se inicia el ${metodo}`)
     try {
         //Se realiza la petición al servidor.
-        const response = await fetch(`${url}`,
+        const response = await fetch(`${ruta}`,
                                      { method: `${metodo}`,
                                        headers: { 'Content-Type': 'application/json' },
                                        ...(body&&{body: JSON.stringify(body)}) } // <--- Se agrega la clave "body" sólo si se la recibe al llamar esta fucnión.

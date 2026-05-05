@@ -7,7 +7,7 @@ export const imprimirHelp = (tipo) => {
             console.log("\t-> DELETE  para ELIMIAR un producto con el id específico.");
             break;
         case "traer":
-            console.log("\t-> GET products/             para consultar por TODOS los productos.");
+            console.log("\t-> GET products              para consultar por TODOS los productos.");
             console.log("\t-> GET products/<productid>  para consultar por un producto con el ID específico.");
             console.log("\t\t - <productid> Id del producto (sólo número).");
             break;
@@ -33,6 +33,9 @@ export const imprimirErrorParametros = (error="",dato="") => {
             break;
         case "parametrosInsuficientes":
             console.log("Parámetros insuficientes...")
+            break;
+        case "recusro":            
+            console.log("- [ "+dato+" ] No contiene un recuro válido.");
             break;
         case "id":
             console.log("- El ID ingresado [ "+dato+" ], es inválido (número natural mayor a 1).")
