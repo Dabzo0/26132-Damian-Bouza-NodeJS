@@ -42,7 +42,7 @@ export const validarParametros = (accion, datos) => {
                         impFn.imprimirHelp("traer");
                         return false;
                     }else{
-                        return {"endPoint":`${recursoGet}${productId}`,"body":null};
+                        return {"endPoint":`${recursoGet}${productIdGet}`,"body":null};
                     }
                     
                     break;
