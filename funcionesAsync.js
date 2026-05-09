@@ -1,6 +1,6 @@
-import { imprimirResultado, imprimirAyudaError } from "./funcionesImprimir.js"
+import { imprimirAyudaError } from "./funcionesImprimir.js"
 
-export const consultaApi = async (metodo,ruta,body=null) => {
+export const consultaApi = async (metodo,ruta,body=null,recurso) => {
     console.log(`Se inicia el ${metodo}`);
     console.log(`\turl: ${ruta}`);
     if (body) console.log(`\tbody: ${JSON.stringify(body)}`);
@@ -15,10 +15,12 @@ export const consultaApi = async (metodo,ruta,body=null) => {
         
         //Se captura si el servidor responde un 4XX o 5XX, o algun otro, que idique que no puede dar respuesta a la petición.
         if (!response.ok) throw new Error(`Error al intentar realizar el ${metodo}, status: ${response.status}`);
+        
         //console.log(response)
+        console.log(`>> Se realizó exitosamente la petición " ${metodo} "`); 
         
         //Se evita resultado = Promise { <pending> }.
-        const resultado = ([].concat(await response.json())).map(p => ({
+        if(recurso===`products`) return ([].concat(await response.json())).map(p => ({
                                                             "id" : p.id,
                                                             "nombre" : p.title,
                                                             "precio" : p.price,
@@ -29,13 +31,12 @@ export const consultaApi = async (metodo,ruta,body=null) => {
                                                         ); // Cuidado, este map se puede hacer de esta manera porque Fakestoreapi devuele un directamente [{...}] <- un objeto que solo contiene el array.
                                                            // Si la API devolviara los datos dentro una clave del objeto se debe usar "([].concat(await response.json().<clave>))" en donde <clave> es la clave que contiene el array a mapear ["clave": {...}]
                                                            // EL [].concat() es para forzar el mapeo de un objeto, en caso de que la api devuelva solo un array {...}
-        //console.log(resultado);
-        imprimirResultado(metodo,resultado);
-        console.log(`>> Se realizó exitosamente la petición " ${metodo} "`); 
-    } catch (error) {
+    
+        } catch (error) {
         console.log(`>> Error: ${error.message}.`);
         imprimirAyudaError(error.message);
-        console.log(`>> No se pudo realizar la petición " ${metodo} "`);        
+        console.log(`>> No se pudo realizar la petición " ${metodo} "`);
+        return [];      
     } finally{
         console.log(`Fin del ${metodo}.`)
     }

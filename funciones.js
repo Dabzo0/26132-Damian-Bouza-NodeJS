@@ -22,7 +22,7 @@ export const validarComando = (com) => {
 }
 
 export const validarParametros = (accion, datos) => {    
-    console.log(`Parámetros: [ ${datos.length} ] => ${datos}`)
+    console.log(`Parámetros: [ ${datos.length} ] => ${datos}`);
 
     const recurso = (datos.length < 1 ) ? "sin-parametros" : capturarRecurso(datos[0].toLowerCase());
     
@@ -37,7 +37,7 @@ export const validarParametros = (accion, datos) => {
                         impFn.imprimirHelp(accion);
                         return false;
                     }else{
-                         return {"endPoint":`${recurso}${productIdGet}`,"body":null};
+                         return {"recurso":`${recurso}`, "endPoint":`${recurso}${productIdGet}`,"body":null};
                     }
                             
                     break;// Este break esta de más...
@@ -55,7 +55,7 @@ export const validarParametros = (accion, datos) => {
                         impFn.imprimirHelp(accion);
                         return false;
                     }else{
-                        return { "endPoint":`${recurso}`,"body": bodyProducts};
+                        return { "recurso":`${recurso}`, "endPoint":`${recurso}`,"body": bodyProducts};
                     }
                     
                     break;
@@ -68,7 +68,7 @@ export const validarParametros = (accion, datos) => {
                         impFn.imprimirHelp(accion);
                         return false;
                     }else{
-                        return {"endPoint":`${recurso}${productIdDelete}`,"body":null};
+                        return { "recurso":`${recurso}`, "endPoint":`${recurso}${productIdDelete}`,"body":null};
                     }
                             
                     break;
@@ -92,7 +92,7 @@ export const validarParametros = (accion, datos) => {
 }
 
 const capturarRecurso = (datos) => {
-    const recusosValidos = ["products","carts","users","auth"]
+    const recusosValidos = ["products","carts","users","auth"];
     const recurso = datos.includes("/")? datos.slice(0,datos.indexOf("/")).toLowerCase():datos.toLowerCase();
 
     if(!recusosValidos.includes(recurso)) return false;
